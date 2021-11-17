@@ -36,7 +36,7 @@ module.exports = {
     filename: 'js/[name]-[contenthash].js', // js目录/文件名-文件hash值.js
     path: path.resolve(__dirname, 'dist'), // 输出到 dist/ 目录
     clean: true, // 每次清理目录
-    publicPath: '/', // 公共路径, 指定应用程序中所有资源的基础路径
+    publicPath: './', // 公共路径, 指定应用程序中所有资源的基础路径
     chunkFilename: 'asset/[name]-[hash].js', // 未列在 entry 中的打包文件
   },
   optimization: {
