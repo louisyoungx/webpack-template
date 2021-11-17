@@ -4,9 +4,13 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   // 开发模式
   mode: 'development',
-  // js入口
+  // 打包入口
   entry: {
     index: './src/index.js',
+    icon: {
+      import: './public/favicon.png',
+      filename: 'favicon.png'
+    },
   },
   // 生成 source map, 用于 dist/ 目录下报错追踪
   devtool: 'inline-source-map',
@@ -28,29 +32,6 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    // 生成index.html
-    new HtmlWebpackPlugin({
-      title: 'Development', //页面注入title
-      filename: 'index.html', // 生成的文件名
-      // template: './public/index.html', // 模版文件目录
-      chunks: 'all', //默认引入所有的chunks链接
-      inject: true, //注入页面位置
-      hash: true, //启用hash
-      favicon: './public/favicon.ico', // favicon.ico路径
-      meta: { //插入meta标签
-        'viewport': 'width=device-width, initial-scale=1.0'
-      },
-      minify: {
-        removeAttributeQuotes: true, //清除script标签引号
-        removeComments: true, //清除html中的注释
-        collapseWhitespace: false, //清除html中的空格、换行符，将html压缩成一行
-        minifyCSS: true, //压缩html的行内样式成一行
-        removeEmptyElements: false, //清除内容为空的元素（慎用）
-        removeStyleLinkTypeAttributes: false //清除style和link标签的type属性
-      }
-    }),
-  ],
   output: {
     filename: 'js/[name]-[contenthash].js', // js目录/文件名-文件hash值.js
     path: path.resolve(__dirname, 'dist'), // 输出到 dist/ 目录
@@ -74,13 +55,6 @@ module.exports = {
   },
   module: {
     rules: [
-      { // html预处理器
-        test: /\.html/,
-        type: 'asset/resource',
-        generator: {
-          filename: 'static/[hash][ext][query]' // 存储于static/目录
-        }
-      },
       { // js预处理器 (依赖 'babel-loader')
         test: /\.m?js$/,
         include: path.resolve(__dirname, 'src'), // 仅将 babel 应用在实际需要将其转换的模块, 原因在于 babel 极为耗时
@@ -116,4 +90,27 @@ module.exports = {
       },
     ],
   },
+  plugins: [
+    // 生成index.html
+    new HtmlWebpackPlugin({
+      title: 'Development', //页面注入title
+      filename: 'index.html', // 生成的文件名
+      template: './public/index.html', // 模版文件目录
+      chunks: 'all', //默认引入所有的chunks链接
+      inject: true, //注入页面位置
+      hash: true, //启用hash
+      favicon: './public/favicon.ico', // favicon.ico路径
+      meta: { //插入meta标签
+        'viewport': 'width=device-width, initial-scale=1.0'
+      },
+      minify: {
+        removeAttributeQuotes: true, //清除script标签引号
+        removeComments: true, //清除html中的注释
+        collapseWhitespace: false, //清除html中的空格、换行符，将html压缩成一行
+        minifyCSS: true, //压缩html的行内样式成一行
+        removeEmptyElements: false, //清除内容为空的元素（慎用）
+        removeStyleLinkTypeAttributes: false //清除style和link标签的type属性
+      }
+    }),
+  ],
 };
