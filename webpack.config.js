@@ -9,7 +9,7 @@ module.exports = {
     index: './src/index.js',
     icon: {
       import: './public/favicon.png',
-      filename: 'favicon.png'
+      filename: 'favicon.png',
     },
   },
   // 生成 source map, 用于 dist/ 目录下报错追踪
@@ -26,7 +26,7 @@ module.exports = {
       '/api': {
         target: 'http://localhost:3000', // 对 /api的请求会将请求代理到 http://localhost:3000/
         pathRewrite: { '^/api': '' }, // 路径重写, 将 '/api' 替换为 ''
-        ws: false,        //如果要代理 websockets，配置这个参数
+        ws: false, // 如果要代理 websockets，配置这个参数
         secure: true, // 不接受在 HTTPS 上运行且证书无效的后端服务器
         changeOrigin: false, // 保留主机头的来源
       },
@@ -36,7 +36,7 @@ module.exports = {
     filename: 'js/[name]-[contenthash].js', // js目录/文件名-文件hash值.js
     path: path.resolve(__dirname, 'dist'), // 输出到 dist/ 目录
     clean: true, // 每次清理目录
-    publicPath: './', // 公共路径, 指定应用程序中所有资源的基础路径
+    publicPath: '/', // 公共路径, 指定应用程序中所有资源的基础路径
     chunkFilename: 'asset/[name]-[hash].js', // 未列在 entry 中的打包文件
   },
   optimization: {
@@ -62,9 +62,9 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env']
-          }
-        }
+            presets: ['@babel/preset-env'],
+          },
+        },
       },
       { // css预处理器 (依赖 'style-loader', 'css-loader')
         test: /\.css$/i,
@@ -74,15 +74,15 @@ module.exports = {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
         type: 'asset/resource', // 发送一个单独的文件并导出 URL
         generator: {
-          filename: 'img/[hash][ext][query]' // 存储于 img/ 目录
-        }
+          filename: 'img/[hash][ext][query]', // 存储于 img/ 目录
+        },
       },
       { // 字体预处理器
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
         type: 'asset/resource', // 发送一个单独的文件并导出 URL
         generator: {
-          filename: 'font/[hash][ext][query]' // 存储于 font/ 目录
-        }
+          filename: 'font/[hash][ext][query]', // 存储于 font/ 目录
+        },
       },
       { // csv预处理器 (依赖 'csv-loader')
         test: /\.(csv|tsv)$/i,
@@ -93,24 +93,24 @@ module.exports = {
   plugins: [
     // 生成index.html
     new HtmlWebpackPlugin({
-      title: 'Development', //页面注入title
+      title: 'Development', // 页面注入title
       filename: 'index.html', // 生成的文件名
       template: './public/index.html', // 模版文件目录
-      chunks: 'all', //默认引入所有的chunks链接
-      inject: true, //注入页面位置
-      hash: true, //启用hash
+      chunks: 'all', // 默认引入所有的chunks链接
+      inject: true, // 注入页面位置
+      hash: true, // 启用hash
       favicon: './public/favicon.ico', // favicon.ico路径
-      meta: { //插入meta标签
-        'viewport': 'width=device-width, initial-scale=1.0'
+      meta: { // 插入meta标签
+        viewport: 'width=device-width, initial-scale=1.0',
       },
       minify: {
-        removeAttributeQuotes: true, //清除script标签引号
-        removeComments: true, //清除html中的注释
-        collapseWhitespace: false, //清除html中的空格、换行符，将html压缩成一行
-        minifyCSS: true, //压缩html的行内样式成一行
-        removeEmptyElements: false, //清除内容为空的元素（慎用）
-        removeStyleLinkTypeAttributes: false //清除style和link标签的type属性
-      }
+        removeAttributeQuotes: true, // 清除script标签引号
+        removeComments: true, // 清除html中的注释
+        collapseWhitespace: false, // 清除html中的空格、换行符，将html压缩成一行
+        minifyCSS: true, // 压缩html的行内样式成一行
+        removeEmptyElements: false, // 清除内容为空的元素（慎用）
+        removeStyleLinkTypeAttributes: false, // 清除style和link标签的type属性
+      },
     }),
   ],
 };

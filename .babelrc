@@ -8,5 +8,6 @@
     "test": {
       "presets": ["env", "stage-2"]
     }
-  }
+  },
+  "ignore": [ "./src/log/index.js" ]
 }
