@@ -1,5 +1,7 @@
 const path = require('path');
+const package = require('./package.json')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   // 开发模式
@@ -7,10 +9,6 @@ module.exports = {
   // 打包入口
   entry: {
     index: './src/index.js',
-    icon: {
-      import: './public/favicon.png',
-      filename: 'favicon.png',
-    },
   },
   // 生成 source map, 用于 dist/ 目录下报错追踪
   devtool: 'inline-source-map',
@@ -18,7 +16,8 @@ module.exports = {
   devServer: {
     server: 'http', // 使用 http 协议
     port: 9000, // 运行在 9000 端口
-    static: './dist', // 静态资源存放路径
+    contentBase: path.resolve(__dirname, 'public'), // 提供静态文件
+    static: path.resolve(__dirname, 'dist'), // 静态资源存放路径
     hot: true, // 热模块替换
     compress: true, // 利用 gzips 压缩 dist/ 目录当中的所有内容
     allowedHosts: ['auto'], // 允许访问域名, 'all'(*), 'auto' (localhost | host | client.webSocketURL.hostname)
@@ -36,7 +35,7 @@ module.exports = {
     filename: 'js/[name]-[contenthash].js', // js目录/文件名-文件hash值.js
     path: path.resolve(__dirname, 'dist'), // 输出到 dist/ 目录
     clean: true, // 每次清理目录
-    publicPath: '/', // 公共路径, 指定应用程序中所有资源的基础路径
+    publicPath: './', // 公共路径, 指定应用程序中所有资源的基础路径
     chunkFilename: 'asset/[name]-[hash].js', // 未列在 entry 中的打包文件
   },
   optimization: {
@@ -83,17 +82,13 @@ module.exports = {
         generator: {
           filename: 'font/[hash][ext][query]', // 存储于 font/ 目录
         },
-      },
-      { // csv预处理器 (依赖 'csv-loader')
-        test: /\.(csv|tsv)$/i,
-        use: ['csv-loader'],
-      },
+      }
     ],
   },
   plugins: [
     // 生成index.html
     new HtmlWebpackPlugin({
-      title: 'Development', // 页面注入title
+      title: package.name, // 页面注入title
       filename: 'index.html', // 生成的文件名
       template: './public/index.html', // 模版文件目录
       chunks: 'all', // 默认引入所有的chunks链接
@@ -101,7 +96,9 @@ module.exports = {
       hash: true, // 启用hash
       favicon: './public/favicon.ico', // favicon.ico路径
       meta: { // 插入meta标签
-        viewport: 'width=device-width, initial-scale=1.0',
+        'viewport': 'width=device-width, initial-scale=1.0',
+        'description': package.description,
+        'theme-color': '#000000',
       },
       minify: {
         removeAttributeQuotes: true, // 清除script标签引号
@@ -111,6 +108,12 @@ module.exports = {
         removeEmptyElements: false, // 清除内容为空的元素（慎用）
         removeStyleLinkTypeAttributes: false, // 清除style和link标签的type属性
       },
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: "public/logo", to: "logo" },
+        { from: "public/manifest.json", to: "" },
+      ],
     }),
   ],
 };
